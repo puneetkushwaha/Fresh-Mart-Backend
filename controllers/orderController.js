@@ -110,24 +110,33 @@ export const updateOrderStatus = async (req, res) => {
         const order = await Order.findById(req.params.id);
 
         if (order) {
+            console.log(`Updating order ${req.params.id} status from ${order.status} to ${req.body.status}`);
             order.status = req.body.status || order.status;
 
             if (req.body.status === 'Delivered') {
+                console.log('Entering Delivered status logic...');
                 order.isDelivered = true;
                 order.deliveredAt = Date.now();
 
                 // Fetch user to send email
-                const populatedOrder = await order.populate('user', 'name email');
                 try {
-                    await sendOrderDeliveredEmail(populatedOrder, populatedOrder.user);
+                    const populatedOrder = await Order.findById(order._id).populate('user', 'name email');
+                    if (populatedOrder && populatedOrder.user) {
+                        console.log(`Sending delivery email to ${populatedOrder.user.email}`);
+                        await sendOrderDeliveredEmail(populatedOrder, populatedOrder.user);
+                    } else {
+                        console.warn('User not found for delivery email');
+                    }
                 } catch (emailErr) {
                     console.error('Failed to send delivery email:', emailErr);
                 }
             }
 
             const updatedOrder = await order.save();
+            console.log('Order updated successfully');
             res.json(updatedOrder);
         } else {
+            console.warn(`Order ${req.params.id} not found`);
             res.status(404).json({ message: 'Order not found' });
         }
     } catch (error) {
