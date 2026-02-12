@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
 export const sendOrderConfirmationEmail = async (order, user) => {
     try {
         const mailOptions = {
-            from: `"FreshMart" <${process.env.EMAIL_USER}>`,
+            from: `"Martify" <${process.env.EMAIL_USER}>`,
             to: user.email,
             subject: `Order Confirmation - Order #${order._id}`,
             html: `
@@ -33,7 +33,7 @@ export const sendOrderConfirmationEmail = async (order, user) => {
         };
 
         const adminMailOptions = {
-            from: `"FreshMart System" <${process.env.EMAIL_USER}>`,
+            from: `"Martify System" <${process.env.EMAIL_USER}>`,
             to: process.env.ADMIN_EMAIL, // New Admin Email from request
             subject: `New Order Received - #${order._id}`,
             html: `
@@ -57,7 +57,7 @@ export const sendOrderConfirmationEmail = async (order, user) => {
 export const sendOrderDeliveredEmail = async (order, user) => {
     try {
         const mailOptions = {
-            from: `"FreshMart" <${process.env.EMAIL_USER}>`,
+            from: `"Martify" <${process.env.EMAIL_USER}>`,
             to: user.email,
             subject: `Your Order Has Been Delivered! - Order #${order._id}`,
             html: `
@@ -82,7 +82,7 @@ export const sendOrderDeliveredEmail = async (order, user) => {
                     <p><strong>Total Paid:</strong> ₹${order.totalPrice}</p>
                     
                     <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;" />
-                    <p style="font-size: 12px; color: #999; text-align: center;">FreshMart - Delivered fresh to your doorstep.</p>
+                    <p style="font-size: 12px; color: #999; text-align: center;">Martify - Delivered fresh to your doorstep.</p>
                 </div>
             `
         };
