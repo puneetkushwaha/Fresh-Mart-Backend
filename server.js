@@ -11,6 +11,9 @@ import adminRoutes from './routes/adminRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 import settingsRoutes from './routes/settingsRoutes.js';
 import couponRoutes from './routes/couponRoutes.js';
+import uploadRoutes from './routes/uploadRoutes.js';
+import path from 'path';
+import fs from 'fs';
 
 console.log('Review routes imported:', !!reviewRoutes);
 
@@ -43,6 +46,15 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/coupons', couponRoutes);
+app.use('/api/upload', uploadRoutes);
+
+const __dirname = path.resolve();
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+}
+app.use('/uploads', express.static(uploadDir));
+
 app.get('/api/test', (req, res) => res.json({ message: 'Backend is working' }));
 console.log('Routes registered!');
 
